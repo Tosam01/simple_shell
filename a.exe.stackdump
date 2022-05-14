@@ -1,0 +1,7 @@
+Exception: STATUS_ACCESS_VIOLATION at eip=611277F9
+eax=20000320 ebx=00000001 ecx=00000011 edx=00000010 esi=6E69622F edi=6128C990
+ebp=00020000 esp=0062AAB0 program=C:\Users\FELIX WORKSTATION\Documents\ALX_course\simple_shell\a.exe, pid 10128, thread main
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+00020000  611277F9 (00000064, 00000000, 014F38C9, 00004164)

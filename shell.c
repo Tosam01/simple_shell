@@ -4,12 +4,13 @@
  * simple_shell - a beautiful code line
  * Return: 0
  */
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **env)
 {
-	char *av = NULL, *token, *str, *arg[1024], *svptr;
+	char *av = NULL, *str, *arg[1024], *arg1[1024], *file_path = NULL;
 	size_t len = 0, size;
 	pid_t my_pid, child_pid;
 	int n = 0, err, status;
+	struct stat st;
 
 	if (argc > 1)
 	execve(*(argv + 1), (argv + 1), NULL);
@@ -21,39 +22,117 @@ int main(int argc, char **argv)
 			printf("%s$ ", SHELL_STR);
 			size = getline(&av, &len, stdin);
 			*(av + size) = '\0';
-			token = strtok_r(av, "' \n'", &svptr);
-			while (token != NULL)
+			
+			str_split(arg, av, "' \n'");
+			free(av);
+			
+			if (!check_abs(arg[0]))
 			{
-				str = malloc(sizeof(char) * strlen(token));
-				strcpy(str, token);
-				*(arg + n) = str;
-				token = strtok_r(NULL, "' \n'", &svptr);
-				n++;
-			}
-			*(arg + n) = NULL;
-
-			child_pid = fork();
-			if (child_pid == 0)
-			{
-				n = execve(arg[0], arg, NULL);
-				if (n == -1)
+				err = find_env_var(arg1, env, "PATH");
+				if (err >= 0)
 				{
-					err = errno;
-					printf("%s: '%s' No such file or directory\n", argv[0], arg[0]);
+					file_path = malloc(1024);
+					find_file(arg1, arg[0], file_path, st);
+					free(arg[0]);
+					arg[0] = file_path;
+					
 				}
-				break;
+				
 			}
 			else
-				wait(&status);
-
-
-			/*n = 0;
-			while (*(arg + n) != NULL)
 			{
-	     			printf("%s\n", *(arg + n));
-				n++;
-			}*/
+				//file_path = arg[0];	
+			}
+			if (arg[0] != NULL)
+			{
+				child_pid = fork();
+				if (child_pid == 0)
+				{
+					n = execve(arg[0], arg, NULL);
+					if (n == -1)
+					{
+						err = errno;
+						printf("%s: '%s' No 1 such file or directory\n", argv[0], arg[0]);
+					}
+					break;
+				}
+				else
+					wait(&status);
+			}
+			else
+			printf("%s: '%s' No 2 such file or directory\n", argv[0], arg[0]);
+
+			
 		}
 	}
 	return (0);
+}
+
+int str_split(char **arg, char *av, char *delmt)
+{
+	char *token, *svptr, *str;
+	int n = 0;
+	
+	token = strtok_r(av, delmt, &svptr);
+	while (token != NULL)
+	{
+		str = malloc(sizeof(char) * strlen(token));
+		strcpy(str, token);
+		*(arg + n) = str;
+		token = strtok_r(NULL, delmt, &svptr);
+		n++;
+	}
+	*(arg + n) = NULL;
+	n = 0;
+	while (*(arg + n) != NULL)
+	{
+			printf("%s\n", *(arg + n));
+		n++;
+	}
+	return (1);
+}
+
+int find_env_var(char **arg, char **env, char *var)
+{
+	
+	char *av;
+	int n = 0;
+	
+	while (env[n] != NULL)
+	{
+		av = malloc(strlen(env[n]));
+		strcpy(av, env[n]);
+		str_split(arg, av, "' =:'");
+		free(av);
+		if (strcmp(arg[0], var) == 0)
+		{
+			return (n);
+		}
+		n++;
+	}
+	return (-1);
+	
+}
+
+int check_abs(char *c)
+{
+	if (*c == '/')
+	return (1);
+	return (0);
+}
+
+int find_file(char **arg, char *f, char *file_path, struct stat st)
+{
+	int n = 1;
+	
+	while(arg[n] != NULL)
+	{
+		strcpy(file_path, arg[n]);
+		strcat(file_path, f);
+		if(stat(file_path, &st) == 0)
+		return (n);
+		n++;
+	}
+	file_path = NULL;
+	return (-1);
 }
