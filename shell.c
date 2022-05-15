@@ -9,7 +9,7 @@ int main(int argc, char **argv, char **env)
 	char *av = NULL, *str, *arg[1024], *arg1[1024], *file_path = NULL;
 	size_t len = 0, size;
 	pid_t my_pid, child_pid;
-	int n = 0, err, status;
+	int n = 0, err = 0, status, found = 0;
 	struct stat st;
 
 	if (argc > 1)
@@ -22,9 +22,10 @@ int main(int argc, char **argv, char **env)
 			printf("%s$ ", SHELL_STR);
 			size = getline(&av, &len, stdin);
 			*(av + size) = '\0';
+			found = 0;
 			
 			str_split(arg, av, "' \n'");
-			free(av);
+			//free(av);
 			
 			if (!check_abs(arg[0]))
 			{
@@ -32,18 +33,28 @@ int main(int argc, char **argv, char **env)
 				if (err >= 0)
 				{
 					file_path = malloc(1024);
-					find_file(arg1, arg[0], file_path, st);
-					free(arg[0]);
-					arg[0] = file_path;
+					err = find_file(arg1, arg[0], file_path, st);
+					//free(arg[0]);
+					if (err != -1)
+					{
+						arg[0] = file_path;
+						found = 1;
+					}
+					else
+					{
+						printf("%s: command not found\n", arg[0]);
+					}
+
 					
 				}
 				
 			}
 			else
 			{
-				//file_path = arg[0];	
+				//file_path = arg[0];
+				found = 1;
 			}
-			if (arg[0] != NULL)
+			if (found)
 			{
 				child_pid = fork();
 				if (child_pid == 0)
@@ -52,15 +63,13 @@ int main(int argc, char **argv, char **env)
 					if (n == -1)
 					{
 						err = errno;
-						printf("%s: '%s' No 1 such file or directory\n", argv[0], arg[0]);
+						printf("%s: '%s' No such file or directory\n", argv[0], arg[0]);
 					}
 					break;
 				}
 				else
 					wait(&status);
 			}
-			else
-			printf("%s: '%s' No 2 such file or directory\n", argv[0], arg[0]);
 
 			
 		}
@@ -83,12 +92,12 @@ int str_split(char **arg, char *av, char *delmt)
 		n++;
 	}
 	*(arg + n) = NULL;
-	n = 0;
+	/*n = 0;
 	while (*(arg + n) != NULL)
 	{
 			printf("%s\n", *(arg + n));
 		n++;
-	}
+	}*/
 	return (1);
 }
 
@@ -103,7 +112,7 @@ int find_env_var(char **arg, char **env, char *var)
 		av = malloc(strlen(env[n]));
 		strcpy(av, env[n]);
 		str_split(arg, av, "' =:'");
-		free(av);
+		//free(av);
 		if (strcmp(arg[0], var) == 0)
 		{
 			return (n);
@@ -128,9 +137,12 @@ int find_file(char **arg, char *f, char *file_path, struct stat st)
 	while(arg[n] != NULL)
 	{
 		strcpy(file_path, arg[n]);
+		strcat(file_path, "/");
 		strcat(file_path, f);
 		if(stat(file_path, &st) == 0)
-		return (n);
+		{
+			return (n);
+		}
 		n++;
 	}
 	file_path = NULL;
