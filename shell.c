@@ -1,7 +1,11 @@
 #include "main.h"
 
 /**
- * simple_shell - a beautiful code line
+ * main - main function
+ * @argc: argument count
+ * @argv: argument velocity
+ * @env: environment
+ *
  * Return: 0
  */
 int main(int argc, char **argv, char **env)
@@ -23,10 +27,10 @@ int main(int argc, char **argv, char **env)
 			size = getline(&av, &len, stdin);
 			*(av + size) = '\0';
 			found = 0;
-			
+
 			str_split(arg, av, "' \n'");
-			//free(av);
-			
+			/*free(av);*/
+
 			if (!check_abs(arg[0]))
 			{
 				err = find_env_var(arg1, env, "PATH");
@@ -34,7 +38,7 @@ int main(int argc, char **argv, char **env)
 				{
 					file_path = malloc(1024);
 					err = find_file(arg1, arg[0], file_path, st);
-					//free(arg[0]);
+					/*free(arg[0]);*/
 					if (err != -1)
 					{
 						arg[0] = file_path;
@@ -45,13 +49,13 @@ int main(int argc, char **argv, char **env)
 						printf("%s: command not found\n", arg[0]);
 					}
 
-					
+
 				}
-				
+
 			}
 			else
 			{
-				//file_path = arg[0];
+			/*file_path = arg[0];*/
 				found = 1;
 			}
 			if (found)
@@ -71,17 +75,26 @@ int main(int argc, char **argv, char **env)
 					wait(&status);
 			}
 
-			
+
 		}
 	}
 	return (0);
 }
 
+/**
+ * str_split - spliting strings
+ *
+ * @arg: argument
+ * @av: array of arguments
+ * @delmt: delimiter
+ *
+ * Return: 1
+ */
 int str_split(char **arg, char *av, char *delmt)
 {
 	char *token, *svptr, *str;
 	int n = 0;
-	
+
 	token = strtok_r(av, delmt, &svptr);
 	while (token != NULL)
 	{
@@ -92,27 +105,38 @@ int str_split(char **arg, char *av, char *delmt)
 		n++;
 	}
 	*(arg + n) = NULL;
-	/*n = 0;
+
+	n = 0;
 	while (*(arg + n) != NULL)
 	{
-			printf("%s\n", *(arg + n));
+		printf("%s\n", *(arg + n));
 		n++;
-	}*/
+	}
 	return (1);
 }
 
+/**
+ * find_env_var - function to find env variable
+ *
+ * @arg: argument
+ * @env: environment
+ * @var: variable
+ *
+ * Return: -1
+ */
+
 int find_env_var(char **arg, char **env, char *var)
 {
-	
+
 	char *av;
 	int n = 0;
-	
+
 	while (env[n] != NULL)
 	{
 		av = malloc(strlen(env[n]));
 		strcpy(av, env[n]);
 		str_split(arg, av, "' =:'");
-		//free(av);
+		/*free(av);*/
 		if (strcmp(arg[0], var) == 0)
 		{
 			return (n);
@@ -120,8 +144,15 @@ int find_env_var(char **arg, char **env, char *var)
 		n++;
 	}
 	return (-1);
-	
+
 }
+
+/**
+ * check_abs - function to check abs
+ *
+ * @c: value pointer
+ * Return: 1 otherwise 0
+ */
 
 int check_abs(char *c)
 {
@@ -130,16 +161,29 @@ int check_abs(char *c)
 	return (0);
 }
 
+/**
+ * find_file - function to find file
+ *
+ * @arg: argument
+ * @f: value
+ * @file_path: path directory of file
+ * @stat: obtain information about the named file and
+ * write it to the area pointed to by the buf argument
+ * @st: structure
+ *
+ * Return: -1
+ */
+
 int find_file(char **arg, char *f, char *file_path, struct stat st)
 {
 	int n = 1;
-	
-	while(arg[n] != NULL)
+
+	while (arg[n] != NULL)
 	{
 		strcpy(file_path, arg[n]);
 		strcat(file_path, "/");
 		strcat(file_path, f);
-		if(stat(file_path, &st) == 0)
+		if  (stat(file_path, &st) == 0)
 		{
 			return (n);
 		}

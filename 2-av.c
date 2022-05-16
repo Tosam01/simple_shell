@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <unistd.h>
 
+/**
+ * main - main function
+ * @ac: argument count
+ * @av: array of an argument
+ *
+ * Return: 0
+ */
+
 int main(int ac, char **av)
 {
 	int size;
