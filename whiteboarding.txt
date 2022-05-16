@@ -1,0 +1,16 @@
+Simple shell project
+
+1. create a main function with argc and argv[]
+2. if argc > 1 execute program using execev
+3. else create an infinite while loop
+4. display #simple_shell$
+5. wait for user to enter command
+6. get user command using get line
+7. split returned string and store in an array variable using split function
+8. fork the parent process
+9. pass string on array position 0 to execve system call on the child process
+
+
+split function
+
+accepts a pointer to a pointer, and a pointer to delimiter
