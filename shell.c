@@ -80,7 +80,7 @@ int str_split(char **arg, char *av, char *delmt)
 	n = 0;
 	while (*(arg + n) != NULL)
 	{
-		printf("%s\n", *(arg + n));
+		/*printf("%s\n", *(arg + n));*/
 		n++;
 	}
 	return (1);
@@ -160,6 +160,5 @@ int find_file(char **arg, char *f)
 		}
 		n++;
 	}
-	free(file_path);
 	return (-1);
 }
