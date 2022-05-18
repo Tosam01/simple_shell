@@ -41,7 +41,7 @@ int shell(char *argv, char **env)
 		child_pid = fork();
 		if (child_pid == 0 && execve(arg[0], arg, NULL) == -1)
 		{
-			printf("%s: '%s' No such file or directory\n", argv[0], arg[0]);
+			printf("%s: '%s' No such file or directory\n", argv, arg[0]);
 			break;
 		}
 		else
