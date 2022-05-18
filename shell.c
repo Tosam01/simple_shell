@@ -11,7 +11,7 @@
 int main(int argc, char **argv, char **env)
 {
 	char *av = NULL, *arg[1024], *arg1[1024];
-	size_t len = 0, size;
+	size_t len = 0, size = 0;
 	pid_t child_pid;
 	int err = 0, status, found = 0;
 
@@ -23,6 +23,8 @@ int main(int argc, char **argv, char **env)
 			found = 0;
 			printf("%s$ ", SHELL_STR);
 			size = getline(&av, &len, stdin);
+			if ((int) size == EOF)
+				break;
 			*(av + size) = '\0';
 			str_split(arg, av, "' \n'");
 			if (!check_abs(arg[0]))
@@ -41,8 +43,9 @@ int main(int argc, char **argv, char **env)
 			if (!found)
 			continue;
 			child_pid = fork();
-			if (child_pid == 0 && execve(arg[0], arg, NULL) == -1)
-			{
+			if (child_pid == 0)
+			{	
+				if (execve(arg[0], arg, NULL) == -1)
 				printf("%s: '%s' No such file or directory\n", argv[0], arg[0]);
 				break;
 			}
@@ -80,7 +83,6 @@ int str_split(char **arg, char *av, char *delmt)
 	n = 0;
 	while (*(arg + n) != NULL)
 	{
-		/*printf("%s\n", *(arg + n));*/
 		n++;
 	}
 	return (1);
