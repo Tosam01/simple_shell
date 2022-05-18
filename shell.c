@@ -43,9 +43,8 @@ int main(int argc, char **argv, char **env)
 			if (!found)
 			continue;
 			child_pid = fork();
-			if (child_pid == 0)
-			{	
-				if (execve(arg[0], arg, NULL) == -1)
+			if (child_pid == 0 && execve(arg[0], arg, NULL) == -1)
+			{
 				printf("%s: '%s' No such file or directory\n", argv[0], arg[0]);
 				break;
 			}
