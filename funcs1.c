@@ -7,7 +7,7 @@
  *
  * Return: 0
  */
-int shell(char *argv, char **env)
+int shell(char **argv, char **env)
 {
 	char *av = NULL, *arg[1024], *arg1[1024];
 	size_t len = 0, size = 0;
@@ -41,14 +41,7 @@ int shell(char *argv, char **env)
 		found = 1;
 		if (!found)
 		continue;
-		child_pid = fork();
-		if (child_pid == 0 && execve(arg[0], arg, NULL) == -1)
-		{
-			printf("%s: '%s' No such file or directory\n", argv, arg[0]);
-			break;
-		}
-		else
-		wait(&status);
+		execute(argv[0], arg);
 	} while (notPipe);
 	return (0);
 }
