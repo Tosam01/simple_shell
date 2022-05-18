@@ -12,12 +12,15 @@ int shell(char *argv, char **env)
 	char *av = NULL, *arg[1024], *arg1[1024];
 	size_t len = 0, size = 0;
 	pid_t child_pid;
-	int err = 0, status, found = 0;
+	int err = 0, status, notPipe = 0, found = 0;
 
-	while (1)
-	{
+	do {
+		if (isatty(fileno(stdin)))
+		{
+			notPipe = 1;
+			printf("%s", SHELL_STR);
+		}
 		found = 0;
-		printf("%s$ ", SHELL_STR);
 		size = getline(&av, &len, stdin);
 		if ((int) size == EOF)
 			break;
@@ -46,7 +49,7 @@ int shell(char *argv, char **env)
 		}
 		else
 		wait(&status);
-	}
+	} while (notPipe);
 	return (0);
 }
 

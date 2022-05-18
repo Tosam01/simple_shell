@@ -10,7 +10,7 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-#define SHELL_STR "Simple_shell"
+#define SHELL_STR "cisfun#: "
 
 int simple_shell(void);
 int find_file(char **arg, char *f);
