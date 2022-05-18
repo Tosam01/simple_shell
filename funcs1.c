@@ -11,8 +11,7 @@ int shell(char **argv, char **env)
 {
 	char *av = NULL, *arg[1024], *arg1[1024];
 	size_t len = 0, size = 0;
-	pid_t child_pid;
-	int err = 0, status, notPipe = 0, found = 0;
+	int err = 0, notPipe = 0, found = 0;
 
 	do {
 		if (isatty(fileno(stdin)))
@@ -41,7 +40,9 @@ int shell(char **argv, char **env)
 		found = 1;
 		if (!found)
 		continue;
-		execute(argv[0], arg);
+		err = execute(argv[0], arg);
+		if (err == -1)
+			break;
 	} while (notPipe);
 	return (0);
 }

@@ -10,11 +10,14 @@
  */
 int execute(char *cmd, char **arg)
 {
+	pid_t child_pid;
+	int status;
+
 	child_pid = fork();
 	if (child_pid == 0 && execve(arg[0], arg, NULL) == -1)
 	{
 		printf("%s: '%s' No such file or directory\n", cmd, arg[0]);
-		break;
+		return (-1);
 	}
 	else
 	wait(&status);
