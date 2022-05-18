@@ -10,74 +10,45 @@
  */
 int main(int argc, char **argv, char **env)
 {
-	char *av = NULL, *str, *arg[1024], *arg1[1024], *file_path = NULL;
+	char *av = NULL, *arg[1024], *arg1[1024];
 	size_t len = 0, size;
-	pid_t my_pid, child_pid;
-	int n = 0, err = 0, status, found = 0;
-	struct stat st;
+	pid_t child_pid;
+	int err = 0, status, found = 0;
 
 	if (argc > 1)
 	execve(*(argv + 1), (argv + 1), NULL);
 	else
-	{
 		while (1)
 		{
-			n = 0;
+			found = 0;
 			printf("%s$ ", SHELL_STR);
 			size = getline(&av, &len, stdin);
 			*(av + size) = '\0';
-			found = 0;
-
 			str_split(arg, av, "' \n'");
-			/*free(av);*/
-
 			if (!check_abs(arg[0]))
 			{
-				err = find_env_var(arg1, env, "PATH");
-				if (err >= 0)
+				if (find_env_var(arg1, env, "PATH") >= 0)
 				{
-					file_path = malloc(1024);
-					err = find_file(arg1, arg[0], file_path, st);
-					/*free(arg[0]);*/
+					err = find_file(arg1, arg[0]);
 					if (err != -1)
-					{
-						arg[0] = file_path;
-						found = 1;
-					}
+					found = 1;
 					else
-					{
-						printf("%s: command not found\n", arg[0]);
-					}
-
-
+					printf("%s: command not found\n", arg[0]);
 				}
-
 			}
 			else
+			found = 1;
+			if (!found)
+			continue;
+			child_pid = fork();
+			if (child_pid == 0 && execve(arg[0], arg, NULL) == -1)
 			{
-			/*file_path = arg[0];*/
-				found = 1;
+				printf("%s: '%s' No such file or directory\n", argv[0], arg[0]);
+				break;
 			}
-			if (found)
-			{
-				child_pid = fork();
-				if (child_pid == 0)
-				{
-					n = execve(arg[0], arg, NULL);
-					if (n == -1)
-					{
-						err = errno;
-						printf("%s: '%s' No such file or directory\n", argv[0], arg[0]);
-					}
-					break;
-				}
-				else
-					wait(&status);
-			}
-
-
+			else
+			wait(&status);
 		}
-	}
 	return (0);
 }
 
@@ -166,17 +137,16 @@ int check_abs(char *c)
  *
  * @arg: argument
  * @f: value
- * @file_path: path directory of file
- * @stat: obtain information about the named file and
  * write it to the area pointed to by the buf argument
- * @st: structure
  *
  * Return: -1
  */
 
-int find_file(char **arg, char *f, char *file_path, struct stat st)
+int find_file(char **arg, char *f)
 {
 	int n = 1;
+	struct stat st;
+	char *file_path = malloc(1024);
 
 	while (arg[n] != NULL)
 	{
@@ -185,10 +155,11 @@ int find_file(char **arg, char *f, char *file_path, struct stat st)
 		strcat(file_path, f);
 		if  (stat(file_path, &st) == 0)
 		{
+			strcpy(f, file_path);
 			return (n);
 		}
 		n++;
 	}
-	file_path = NULL;
+	free(file_path);
 	return (-1);
 }
