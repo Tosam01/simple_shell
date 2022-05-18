@@ -17,5 +17,6 @@ int find_file(char **arg, char *f);
 int check_abs(char *c);
 int find_env_var(char **arg, char **env, char *var);
 int str_split(char **arg, char *av, char *delmt);
+int shell(char *argv, char **env);
 
 #endif
