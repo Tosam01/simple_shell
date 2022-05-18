@@ -167,7 +167,6 @@ int check_abs(char *c)
  * @arg: argument
  * @f: value
  * @file_path: path directory of file
- * @stat: obtain information about the named file and
  * write it to the area pointed to by the buf argument
  * @st: structure
  *
