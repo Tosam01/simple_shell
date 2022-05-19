@@ -11,7 +11,7 @@
 int execute(char *cmd, char **arg)
 {
 	pid_t child_pid;
-	int status, n, prev = 0, next = 0;
+	int status, prev = 0, next = 0;
 
 	while (1)
 	{
@@ -21,9 +21,9 @@ int execute(char *cmd, char **arg)
 			free(*(arg + next));
 			*(arg + next) = NULL;
 		}
-		
+
 		child_pid = fork();
-		if (child_pid == 0 && execve(arg[prev], arg[prev], NULL) == -1)
+		if (child_pid == 0 && execve(arg[prev], arg + prev, NULL) == -1)
 		{
 			printf("%s: '%s' No such file or directory\n", cmd, arg[prev]);
 			return (-1);
@@ -45,10 +45,8 @@ int execute(char *cmd, char **arg)
  *
  * Return: 0
  */
-int check_next(char **arg, int *prev)
+int check_next(char **arg, int prev)
 {
-	int next;
-
 	if (prev > 0)
 		prev++;
 	while (*(arg + prev) != NULL)

@@ -43,7 +43,7 @@ int shell(char **argv, char **env)
 		err = execute(argv[0], arg);
 		if (err == -1)
 			break;
-	} while (notPipe);
+	} while (notPipe || (int) size != EOF);
 	return (0);
 }
 
@@ -68,7 +68,7 @@ int str_split(char **arg, char *av, char *delmt, char *delmt2)
 	{
 		for (str2 = token; ; str2 = NULL)
 		{
-			subtoken = strtok_r(NULL, delmt2, &svptr2);
+			subtoken = strtok_r(str2, delmt2, &svptr2);
 			if (subtoken == NULL)
 				break;
 			str = malloc(sizeof(char) * strlen(subtoken));
@@ -76,10 +76,10 @@ int str_split(char **arg, char *av, char *delmt, char *delmt2)
 			*(arg + n) = str;
 			n++;
 		}
-		
+
 		token = strtok_r(NULL, delmt, &svptr);
 		if (token == NULL)
-				break;
+			break;
 		str = malloc(sizeof(char) * strlen("next") + 1);
 		strcpy(str, "next");
 		*(arg + n) = str;
@@ -115,7 +115,7 @@ int find_env_var(char **arg, char **env, char *var)
 	{
 		av = malloc(strlen(env[n]));
 		strcpy(av, env[n]);
-		str_split(arg, av, "' =:'");
+		str_split(arg, av, "'\0'", "' =:'");
 		/*free(av);*/
 		if (strcmp(arg[0], var) == 0)
 		{
