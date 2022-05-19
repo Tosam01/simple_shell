@@ -20,4 +20,5 @@ int str_split(char **arg, char *av, char *delmt, char *delmt2);
 int shell(char **argv, char **env);
 int execute(char *cmd, char **arg);
 int check_next(char **arg, int prev);
+int free2(char **arg);
 #endif

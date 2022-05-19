@@ -44,6 +44,9 @@ int shell(char **argv, char **env)
 		if (err == -1)
 			break;
 	} while (notPipe || (int) size != EOF);
+	/*free2(arg);*/
+	free2(arg1);
+	free(av);
 	return (0);
 }
 

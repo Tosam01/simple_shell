@@ -11,29 +11,16 @@
 int execute(char *cmd, char **arg)
 {
 	pid_t child_pid;
-	int status, prev = 0, next = 0;
+	int status;
 
-	while (1)
+	child_pid = fork();
+	if (child_pid == 0 && execve(arg[0], arg, NULL) == -1)
 	{
-		next = check_next(arg, prev);
-		if (next > 0)
-		{
-			free(*(arg + next));
-			*(arg + next) = NULL;
-		}
-
-		child_pid = fork();
-		if (child_pid == 0 && execve(arg[prev], arg + prev, NULL) == -1)
-		{
-			printf("%s: '%s' No such file or directory\n", cmd, arg[prev]);
-			return (-1);
-		}
-		else
-		wait(&status);
-		if (next == 0)
-			break;
-		prev = next++;
+		printf("%s: '%s' No such file or directory\n", cmd, arg[0]);
+		return (-1);
 	}
+	else
+	wait(&status);
 	return (0);
 }
 
@@ -54,6 +41,19 @@ int check_next(char **arg, int prev)
 		if (strcmp("next", *(arg + prev)) == 0)
 			return (prev);
 		prev++;
+	}
+	return (0);
+}
+
+
+
+int free2(char **arg)
+{
+	int n = 0;
+
+	while (*(arg + n) != NULL)
+	{
+		free(*(arg + n));
 	}
 	return (0);
 }
