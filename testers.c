@@ -1,4 +1,4 @@
-#include "shell.h"
+#include "main.h"
 
 
 char *test_path(char **path, char *command)
@@ -8,7 +8,7 @@ char *test_path(char **path, char *command)
 
 	while (path[i])
 	{
-		output = append_path(path[i], command);
+		output = appender(path[i], command);
 		if (access(output, F_OK | X_OK) == 0)
 			return (output);
 		free(output);

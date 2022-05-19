@@ -10,7 +10,7 @@ int main(int ac, char **av, char *envp[])
 	(void)envp, (void)av;
 	if (ac < 1)
 		return (-1);
-	signal(SIGINT, handle_signal);
+	signal(SIGINT, signal_handler);
 	while (1)
 	{
 		free2(command);
