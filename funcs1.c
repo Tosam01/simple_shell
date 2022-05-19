@@ -24,7 +24,7 @@ int shell(char **argv, char **env)
 		if ((int) size == EOF)
 			break;
 		*(av + size) = '\0';
-		str_split(arg, av, "' \n'");
+		str_split(arg, av, "'\n'", "' '");
 		if (!check_abs(arg[0]))
 		{
 			if (find_env_var(arg1, env, "PATH") >= 0)
@@ -54,21 +54,35 @@ int shell(char **argv, char **env)
  * @arg: argument
  * @av: array of arguments
  * @delmt: delimiter
+ * @delmt2: delimiter
  *
  * Return: 1
  */
-int str_split(char **arg, char *av, char *delmt)
+int str_split(char **arg, char *av, char *delmt, char *delmt2)
 {
-	char *token, *svptr, *str;
+	char *token, *subtoken, *svptr, *svptr2, *str, *str2;
 	int n = 0;
 
 	token = strtok_r(av, delmt, &svptr);
 	while (token != NULL)
 	{
-		str = malloc(sizeof(char) * strlen(token));
-		strcpy(str, token);
-		*(arg + n) = str;
+		for (str2 = token; ; str2 = NULL)
+		{
+			subtoken = strtok_r(NULL, delmt2, &svptr2);
+			if (subtoken == NULL)
+				break;
+			str = malloc(sizeof(char) * strlen(subtoken));
+			strcpy(str, subtoken);
+			*(arg + n) = str;
+			n++;
+		}
+		
 		token = strtok_r(NULL, delmt, &svptr);
+		if (token == NULL)
+				break;
+		str = malloc(sizeof(char) * strlen("next") + 1);
+		strcpy(str, "next");
+		*(arg + n) = str;
 		n++;
 	}
 	*(arg + n) = NULL;

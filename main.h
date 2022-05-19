@@ -16,8 +16,8 @@ int simple_shell(void);
 int find_file(char **arg, char *f);
 int check_abs(char *c);
 int find_env_var(char **arg, char **env, char *var);
-int str_split(char **arg, char *av, char *delmt);
+int str_split(char **arg, char *av, char *delmt, char *delmt2);
 int shell(char **argv, char **env);
 int execute(char *cmd, char **arg);
-
+int check_next(char **arg, int prev);
 #endif
