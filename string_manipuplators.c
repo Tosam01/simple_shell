@@ -1,5 +1,11 @@
 #include "main.h"
 
+/**
+ * _strcmp - a function
+ * @s1: s1
+ * @s2: s2
+ * Return: output
+ */
 
 int _strcmp(char *s1, char *s2)
 {
@@ -13,6 +19,11 @@ int _strcmp(char *s1, char *s2)
 	return (output);
 }
 
+/**
+ * _strlen - a function
+ * @s: value
+ * Return: count
+ */
 
 int _strlen(char *s)
 {
@@ -26,6 +37,14 @@ int _strlen(char *s)
 	return (count);
 }
 
+/**
+ * _strncmp - a function
+ * @s1: s1
+ * @s2: s2
+ * @n: value
+ *
+ * Return: 0
+ */
 
 int _strncmp(char *s1, char *s2, int n)
 {
@@ -39,6 +58,11 @@ int _strncmp(char *s1, char *s2, int n)
 	return (0);
 }
 
+/**
+ * _strdup - a function
+ * @s: value
+ * Return: ptr
+ */
 
 char *_strdup(char *s)
 {
@@ -60,6 +84,12 @@ char *_strdup(char *s)
 	return (ptr);
 }
 
+/**
+ * _strchr - a function
+ * @s: value 1
+ * @c: value 2
+ * Return: NULL
+ */
 
 char *_strchr(char *s, char c)
 {
