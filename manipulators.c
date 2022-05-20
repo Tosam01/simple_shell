@@ -1,5 +1,11 @@
 #include "main.h"
 
+/**
+ * appender - to throw a message in console
+ * @path: an absolute path of a file
+ * @cmd: execute a specified string as a command in MS-DOS
+ * Return: buffer
+ */
 
 char *appender(char *path, char *cmd)
 {
@@ -36,6 +42,13 @@ char *appender(char *path, char *cmd)
 	return (buffer);
 }
 
+/**
+ * checker - function that checks buffer
+ * @cmd: execute a specified string as a command in MS-DOS
+ * @buffer: A temporary storage area
+ * Return: 0
+ */
+
 int checker(char **cmd, char *buffer)
 {
 	if (builtin_handlers(cmd, buffer))
@@ -47,6 +60,12 @@ int checker(char **cmd, char *buffer)
 	}
 	return (0);
 }
+
+/**
+ * execute - function to execute a file
+ * @cp: copy function
+ * @cmd: execute a specified string as a command in MS-DOS
+ */
 
 void execute(char *cp, char **cmd)
 {
@@ -69,12 +88,23 @@ void execute(char *cp, char **cmd)
 		wait(&status);
 }
 
+/**
+ * exit_cmd - function to exit MS-DOS
+ * @line: use to draw a line
+ * @cmd: to execute a command in MS-DOS
+ */
+
 void exit_cmd(char **cmd, char *line)
 {
 	free(line);
 	free2(cmd);
 	exit(0);
 }
+
+/**
+ * free2 - just another function
+ * @buf: buffer
+ */
 
 void free2(char **buf)
 {
