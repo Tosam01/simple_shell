@@ -28,7 +28,8 @@ int builtin_handlers(char **cmd, char *line)
 
 
 /**
- * signal handler - handles signal functions
+ * signal_handler - handles signal functions
+ * @m: value
  */
 
 void signal_handler(int m)
@@ -40,9 +41,7 @@ void signal_handler(int m)
 
 /**
  * find_path - function to find path
- * @x: value 
- * @env: environment
- * @path: pathway
+ *
  *
  * Return: NULL
  */
@@ -69,10 +68,8 @@ char *find_path(void)
 	return (NULL);
 }
 
-/***
+/**
  * print_env - print environment
- * @x: value
- * @env: environment
  */
 
 void print_env(void)
