@@ -2,8 +2,12 @@
 #include <stdio.h>
 
 /**
- *
- * builtin_handlers - a function that
+ * builtin_handlers - a function that handles builtin
+ * functions
+ * @cmd: execute a specified string as a command
+ * @line: to draw a line from one point to another
+ * Return: NULL
+ */
 
 int builtin_handlers(char **cmd, char *line)
 {
@@ -23,6 +27,10 @@ int builtin_handlers(char **cmd, char *line)
 }
 
 
+/**
+ * signal handler - handles signal functions
+ */
+
 void signal_handler(int m)
 {
 	(void)m;
@@ -30,6 +38,14 @@ void signal_handler(int m)
 	write(STDERR_FILENO, "$ ", 2);
 }
 
+/**
+ * find_path - function to find path
+ * @x: value 
+ * @env: environment
+ * @path: pathway
+ *
+ * Return: NULL
+ */
 
 char *find_path(void)
 {
@@ -53,7 +69,11 @@ char *find_path(void)
 	return (NULL);
 }
 
-
+/***
+ * print_env - print environment
+ * @x: value
+ * @env: environment
+ */
 
 void print_env(void)
 {
@@ -68,6 +88,9 @@ void print_env(void)
 	}
 }
 
+/**
+ * prompter - function prompter
+ */
 
 void prompter(void)
 {
