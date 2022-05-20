@@ -6,7 +6,7 @@
  * @av: argument velocity
  * @envp: an array of pointers to environment variables
  *
- * Return 0
+ * Return: 0
  */
 
 int main(int ac, char **av, char *envp[])

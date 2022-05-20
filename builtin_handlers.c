@@ -1,5 +1,9 @@
 #include "main.h"
+#include <stdio.h>
 
+/**
+ *
+ * builtin_handlers - a function that
 
 int builtin_handlers(char **cmd, char *line)
 {

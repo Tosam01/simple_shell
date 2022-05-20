@@ -41,6 +41,12 @@ int _strlen(char *s);
 char *_strdup(char *s);
 char *_strchr(char *s, char c);
 
+/**
+ * struct builtin - function that declares
+ * built in command
+ * @env: environment
+ * @exit: exit
+ */
 
 struct builtin
 {
@@ -48,15 +54,27 @@ struct builtin
 	char *exit;
 } builtin;
 
+/*
+ * struct info - function to show details
+ * @final_exit: exit
+ * @ln_count: unsigned count
+ * @info: infomation
+ */
+
 struct info
 {
 	int final_exit;
 	int ln_count;
 } info;
 
+/*
+ * struct flags - function to process flags
+ * @flags: flags
+ */
+
 struct flags
 {
 	bool interactive;
 } flags;
 
-#endif 
+#endif
