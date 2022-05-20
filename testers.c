@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+ * test_path - function to test path of a file
+ * @path: path of a filename
+ * @command: command
+ *
+ * Return: NULL
+ */
 
 char *test_path(char **path, char *command)
 {
@@ -16,6 +23,12 @@ char *test_path(char **path, char *command)
 	}
 	return (NULL);
 }
+
+/**
+ * tokenizer - function to get token
+ * @line: line path
+ * Return: token
+ */
 
 char **tokenizer(char *line)
 {
